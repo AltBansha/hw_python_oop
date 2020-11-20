@@ -25,16 +25,18 @@ class Calculator:
     def get_today_stats(self):
         today = dt.date.today()     
         return sum(
-            record.amount for record in
-            self.records if record.date == today
+            record.amount
+            for record in self.records
+            if record.date == today
         )
 
     def get_week_stats(self):
         today = dt.date.today()
         start_date = today - dt.timedelta(days=7)
         return sum(
-            record.amount for record in
-            self.records if start_date < record.date <= today
+            record.amount
+            for record in self.records
+            if start_date < record.date <= today
         )
 
 
@@ -51,10 +53,10 @@ class CashCalculator(Calculator):
     DEBT = 'Денег нет, держись: твой долг - {remained} {title}'
 
     def get_today_cash_remained(self, currency):
-        title, rate = self.CURRENCIES[currency]
-        remained = round((self.limit - self.get_today_stats()) / rate, 2)
-        if remained == 0:
+        if self.limit - self.get_today_stats() == 0:
             return self.NO_MONEY
+        title, rate = self.CURRENCIES[currency]
+        remained = round((self.limit - self.get_today_stats()) / rate, 2)    
         if remained > 0:
             return self.REMAINED.format(remained=remained, title=title)
         elif remained < 0:                         
@@ -63,7 +65,7 @@ class CashCalculator(Calculator):
                                            
 class CaloriesCalculator(Calculator):
     REMAINED = ('Сегодня можно съесть что-нибудь ещё, но с общей '
-               'калорийностью не более {remained} кКал') 
+                'калорийностью не более {remained} кКал') 
     ENOUGH = 'Хватит есть!'                
 
     def get_calories_remained(self):
@@ -77,7 +79,7 @@ if __name__ == "__main__":
 
     Cash = CashCalculator(10000)
     Calories = CaloriesCalculator(2600)   
-    r1 = Record(amount=10000, comment="Безудержный шопинг")
+    r1 = Record(amount=8000, comment="Безудержный шопинг")
     r2 = Record(amount=6000, comment="Вино", date="14.11.2020")
     r3 = Record(amount=1000, comment="Конфеты")
     r4 = Record(amount=1000, comment="Тортик")
