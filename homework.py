@@ -53,10 +53,11 @@ class CashCalculator(Calculator):
     DEBT = 'Денег нет, держись: твой долг - {remained} {title}'
 
     def get_today_cash_remained(self, currency):
-        if self.limit - self.get_today_stats() == 0:
+        current_limit = self.limit - self.get_today_stats()
+        if current_limit == 0:
             return self.NO_MONEY
         title, rate = self.CURRENCIES[currency]
-        remained = round((self.limit - self.get_today_stats()) / rate, 2)    
+        remained = round(current_limit / rate, 2)    
         if remained > 0:
             return self.REMAINED.format(remained=remained, title=title)
         elif remained < 0:                         
@@ -79,7 +80,7 @@ if __name__ == "__main__":
 
     Cash = CashCalculator(10000)
     Calories = CaloriesCalculator(2600)   
-    r1 = Record(amount=8000, comment="Безудержный шопинг")
+    r1 = Record(amount=9000, comment="Безудержный шопинг")
     r2 = Record(amount=6000, comment="Вино", date="14.11.2020")
     r3 = Record(amount=1000, comment="Конфеты")
     r4 = Record(amount=1000, comment="Тортик")
